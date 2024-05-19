@@ -5,6 +5,10 @@ spring:
   application:
     name: "accounts"
 
+#  reading config from config server
+  config:
+    import: "optional:configserver:http://localhost:8071/"
+
   datasource:
     url: jdbc:h2:file:/home/ashraful/Documents/Microservices_EzyBytes/h2_db_account
     driverClassName: org.h2.Driver

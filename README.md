@@ -89,3 +89,36 @@
     but reading properties from multiple server properties by these ways is not a good idea,
     so we have spring profile concepts here
 
+
+### Reading Properties from Config Server 
+    
+    1. Firstly add config client dependencies
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+		</dependency>
+
+    and
+        <dependencyManagement>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.cloud</groupId>
+                    <artifactId>spring-cloud-dependencies</artifactId>
+                    <version>${spring-cloud.version}</version>
+                    <type>pom</type>
+                    <scope>import</scope>
+                </dependency>
+            </dependencies>
+	    </dependencyManagement>
+
+    2. Then, add properties in the application.yml for config server to read configurations
+
+        spring:
+          config:
+            import: "optional:configserver:http://localhost:8071/"
+
+        here, optional means, if we can't read config from config server then it can also able to start account microservice,
+        here configserver is not the configserver application name, it is by default for spring
+        if config server is necessary to start account microservice, then we shouldn't add optional here,
+        In our case configserver application should be running while account microservice is reading configuration from configserver
