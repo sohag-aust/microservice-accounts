@@ -122,3 +122,20 @@
         here configserver is not the configserver application name, it is by default for spring
         if config server is necessary to start account microservice, then we shouldn't add optional here,
         In our case configserver application should be running while account microservice is reading configuration from configserver
+
+### Change record to class
+    We will change config and read using the AccountsContactInfoDto object, 
+    but as it is record class and immutable, so need to change it from record
+
+
+### Refresh Actuator Path
+
+    management:
+      endpoints:
+        web:
+          exposure:
+            include: "*"
+    
+    in the application.yml, I have set spring actuator management config, where we have /actuator/refresh endpoint.
+    this is a post endpoint, so when we hit it we can see if any configuration from github repo for this account microservice is changed
+    or not.
