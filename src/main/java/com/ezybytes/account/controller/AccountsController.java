@@ -36,8 +36,8 @@ public class AccountsController {
     private final AccountsService accountsService;
     private final AccountsContactInfoDto accountsContactInfoDto;
 
-    @Value("${build.version}")
-    private String buildVersion;
+//    @Value("${build.version}")
+//    private String buildVersion;
 
     @Operation(
             summary = "Create Account REST API",
@@ -183,7 +183,7 @@ public class AccountsController {
     )
     @GetMapping("/contact-info")
     public ResponseEntity<AccountsContactInfoDto> getContactInfo() {
-        log.info("Build Information : {}", buildVersion);
+//        log.info("Build Information : {}", buildVersion);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(accountsContactInfoDto);
