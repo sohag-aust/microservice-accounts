@@ -13,6 +13,7 @@ import com.ezybytes.account.repository.AccountsRepository;
 import com.ezybytes.account.repository.CustomerRepository;
 import com.ezybytes.account.service.AccountsService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -20,6 +21,7 @@ import java.util.Random;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class AccountsServiceImpl implements AccountsService {
 
     private AccountsRepository accountsRepository;

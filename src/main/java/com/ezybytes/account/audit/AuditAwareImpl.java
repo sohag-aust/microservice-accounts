@@ -11,6 +11,6 @@ public class AuditAwareImpl implements AuditorAware<String> {
     @Override
     public Optional<String> getCurrentAuditor() {
         // TODO:: hard coded value is injected, it will be changed
-        return Optional.of("Accounts_MicroService");
+        return Optional.of("Accounts_MS");
     }
 }
