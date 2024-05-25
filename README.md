@@ -158,3 +158,16 @@
     4. Extract the folder and goto the folder,
     5. then run ./sqlectron command to run the GUI
     6. click add option and set configuration, username and password is root and port is 3307:3306 <PC_PORT:CONTAINER_PORT>
+
+### Section-7 :: MySql docker compose container
+
+    1. Firstly create new docker images for all services with tag s7
+        like: configserver:s7, accounts:s7, loans:s7, cards:s7
+
+    2. Then, change docker compose with mysql container related changes
+
+    3. Change application datasource properties as per docker compose
+    4. Make package before creating new docker image
+    5. so run mysql docker container for accountsdb locally first, before creating package. otherwise it
+        will throw exception
+    6. then create docker image with tag s7
