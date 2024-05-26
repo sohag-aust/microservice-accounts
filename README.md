@@ -171,3 +171,27 @@
     5. so run mysql docker container for accountsdb locally first, before creating package. otherwise it
         will throw exception
     6. then create docker image with tag s7
+
+
+### Section-8 :: Service Discovery and Service Registration
+    
+    1. Add eureka client maven dependency to connect with eureka server
+
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+    </dependency>
+
+    2. Add service registration related dependency in application.yml
+    3. Settnig some information properties using info tag in application.yml to show in eureka dashboard
+    4. enable shutdown properties in actuator section, to enable deregistering from eureka server when account microservice is disabled or stopped
+    5. Run the application, and before running make sure eureka server, configserver and docker container for mysql db is running
+
+### Shutdown and DeRegistering from eureka server
+
+    we have enabled spring actuator shutdown and also setting endpoints shutdown enabled in the application.yml .
+    this, will enable shutting down out application without closing it from intelliJ.
+    So, spring actuator provide us a POST api which is : http://localhost:8080/actuator/shutdown
+    when, we hit it our application will be shutting down and also deregistering from eureka server.
+    
+    
