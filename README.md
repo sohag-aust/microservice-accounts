@@ -194,4 +194,8 @@
     So, spring actuator provide us a POST api which is : http://localhost:8080/actuator/shutdown
     when, we hit it our application will be shutting down and also deregistering from eureka server.
     
+
+### Section :: 9 :: Get custom header from GatewayService to keep track of co-relation id
     
+    we need to change in the CustomerController , @GetMapping("/fetchCustomerDetails") api to accept request header of co-relation id from 
+    the gateway service and pass it to loans and cards microservices
