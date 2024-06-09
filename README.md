@@ -226,3 +226,24 @@
         http://localhost:8080/actuator/circuitbreakers
         http://localhost:8080/actuator/circuitbreakerevents
     
+
+    *** FallBack Method purpose ***
+
+    Fallback Method: If the primary method encounters an error, takes too long to respond, or is unavailable for any reason, 
+    the system can invoke a fallback method as an alternative path to handle the request.
+
+
+    *** Retry mechanism in accounts microservices ***
+    1. add properties in application.yml
+    2. make an api which will return the application build-info
+    3. add retry in the api, and intentionally throw RuntimeException from the api
+    4. also put a fallback method
+    5. so in the application.yml we have set retry mechanism,
+    and also skip retrying while getting nullPointer exception
+
+    6. run the gateway server and account microservice
+    7. hit the api : http://localhost:8072/eazybank/accounts/api/build-info
+    8. see the logs of account microservice
+    9. we can see, the api retry count is 3 as described in application.yml
+    10. and after that the fallback method is triggered
+    

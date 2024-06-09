@@ -5,6 +5,7 @@ import com.ezybytes.account.dto.AccountsContactInfoDto;
 import com.ezybytes.account.dto.CustomerDto;
 import com.ezybytes.account.dto.ErrorResponseDto;
 import com.ezybytes.account.service.AccountsService;
+import io.github.resilience4j.retry.annotation.Retry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -36,8 +37,8 @@ public class AccountsController {
     private final AccountsService accountsService;
     private final AccountsContactInfoDto accountsContactInfoDto;
 
-//    @Value("${build.version}")
-//    private String buildVersion;
+    @Value("${build.version}")
+    private String buildVersion;
 
     @Operation(
             summary = "Create Account REST API",
@@ -187,5 +188,22 @@ public class AccountsController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(accountsContactInfoDto);
+    }
+
+    @Retry(name = "getBuildInfo",fallbackMethod = "getBuildInfoFallback") // fallBack method name should be like <main_method_name>+Fallback
+    @GetMapping("/build-info")
+    public ResponseEntity<String> getBuildInfo() {
+        log.info("getBuildInfo() method Invoked");
+        throw new RuntimeException("getBuildInfo() method");
+//        return ResponseEntity
+//                .status(HttpStatus.OK)
+//                .body(buildVersion);
+    }
+
+    public ResponseEntity<String> getBuildInfoFallback(Throwable throwable) {
+        log.info("getBuildInfoFallback() method Invoked");
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("0.9");
     }
 }

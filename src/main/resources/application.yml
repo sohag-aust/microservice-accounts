@@ -45,6 +45,8 @@ springdoc:
   swagger-ui:
     path: /swagger
 
+build:
+  version: "3.0"
 
 # Actuator properties
 management:
@@ -93,7 +95,7 @@ info:
     version: "1.0.0"
 
 
-# Resiliency related properties
+# Resiliency related properties | circuit breaker pattern
 resilience4j.circuitbreaker:
   configs:
     default:
@@ -101,3 +103,15 @@ resilience4j.circuitbreaker:
       permittedNumberOfCallsInHalfOpenState: 2
       failureRateThreshold: 50
       waitDurationInOpenState: 10000
+
+
+# Resiliency related properties | retry pattern
+resilience4j.retry:
+  configs:
+    default:
+      max-attempts: 3
+      waitDuration: 10
+      enableExponentialBackoff: true
+      exponentialBackoffMultiplier: 2
+      ignoreExceptions:
+        - java.lang.NullPointerException
