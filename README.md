@@ -199,3 +199,30 @@
     
     we need to change in the CustomerController , @GetMapping("/fetchCustomerDetails") api to accept request header of co-relation id from 
     the gateway service and pass it to loans and cards microservices
+
+
+### Section - 10 : Circuit Breaker Pattern | Retry Pattern | Rate Limiter Pattern
+
+    1. Implementing circuit breaker pattern in the Feign Client in account microservice for getting information from loans and
+        cards microservices. And also setting fallback mechanism in the Feign Client for loans and cards microservices.
+    2. We are setting Fallback mechanism in the Feign Client, because when accounts microservices try to get information from
+        loans and cards microservices, if loans or cards microservices is not available, then the loans or cards microservices
+        response will be delayed and this will effect to the accoutns microservices too. which is known as ripple effect
+
+    3. Ripple effect : a situation in which one event produces effects which spread and produce further effects. Means it is a chain effect
+
+    4. After setting circuit breaker configs, dependency and fallback mechanism. Start all the services.
+        accounts, loans and cards microservices
+
+    5. Firstly create all information using gateway service by hitting the post request for creating account, loans and cards informations
+    6. Then try to fetch details from gateway service of accounts, loan and cards microservices
+ 
+    7. As the services are up and running, so response will be returned
+    8. Now, stop loans microservices
+    9. Try to fetch details from using gateway service, now we will see the loans information is null
+    10. But the overall result is not affected, as the fallback mechanism is working
+    11. Hit the fetch request again and again and look into the following urls to see circuit breaker state transition and events
+
+        http://localhost:8080/actuator/circuitbreakers
+        http://localhost:8080/actuator/circuitbreakerevents
+    
