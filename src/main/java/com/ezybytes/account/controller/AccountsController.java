@@ -2,6 +2,7 @@ package com.ezybytes.account.controller;
 
 import com.ezybytes.account.constants.AccountsConstants;
 import com.ezybytes.account.dto.AccountsContactInfoDto;
+import com.ezybytes.account.dto.AccountsContactInfoDtoWithBuildInfo;
 import com.ezybytes.account.dto.CustomerDto;
 import com.ezybytes.account.dto.ErrorResponseDto;
 import com.ezybytes.account.service.AccountsService;
@@ -182,10 +183,16 @@ public class AccountsController {
     }
     )
     @GetMapping("/contact-info")
-    public ResponseEntity<AccountsContactInfoDto> getContactInfo() {
+    public ResponseEntity<AccountsContactInfoDtoWithBuildInfo> getContactInfo() {
         log.info("Build Information : {}", buildVersion);
+        AccountsContactInfoDtoWithBuildInfo accountsContactInfoDtoWithBuildInfo =
+                AccountsContactInfoDtoWithBuildInfo
+                        .builder()
+                        .accountsContactInfoDto(accountsContactInfoDto)
+                        .buildInfo(buildVersion)
+                        .build();
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(accountsContactInfoDto);
+                .body(accountsContactInfoDtoWithBuildInfo);
     }
 }

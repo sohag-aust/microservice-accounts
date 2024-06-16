@@ -10,7 +10,7 @@ spring:
     import: "optional:configserver:http://localhost:5000/"
 
   datasource:
-    url: jdbc:h2:file:/home/ashraful/Documents/Microservices_EzyBytes/h2_db_account
+    url: jdbc:h2:file:/home/ashraful/Documents/Microservices_EzyBytes/h2_db_account_2
     driverClassName: org.h2.Driver
     username: sa
     password: ''
@@ -28,7 +28,7 @@ spring:
 #  Example => active: qa, prod | here prod will get the highest priority, as it is in the last sequence
 
   profiles:
-    active: prod
+    active: dv-01
 
 springdoc:
   swagger-ui:
