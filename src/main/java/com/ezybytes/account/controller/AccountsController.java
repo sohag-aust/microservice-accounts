@@ -5,6 +5,7 @@ import com.ezybytes.account.dto.AccountsContactInfoDto;
 import com.ezybytes.account.dto.CustomerDto;
 import com.ezybytes.account.dto.ErrorResponseDto;
 import com.ezybytes.account.service.AccountsService;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -182,6 +183,7 @@ public class AccountsController {
             )
     }
     )
+    @RateLimiter(name = "getContactInfo", fallbackMethod = "getContactInfoFallBack")
     @GetMapping("/contact-info")
     public ResponseEntity<AccountsContactInfoDto> getContactInfo() {
 //        log.info("Build Information : {}", buildVersion);
@@ -205,5 +207,12 @@ public class AccountsController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body("0.9");
+    }
+
+    public ResponseEntity<String> getContactInfoFallBack(Throwable throwable) {
+        log.info("getContactInfoFallBack() method Invoked");
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("API is Rate-Limited, Contact to System-Admin");
     }
 }

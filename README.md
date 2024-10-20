@@ -246,4 +246,87 @@
     8. see the logs of account microservice
     9. we can see, the api retry count is 3 as described in application.yml
     10. and after that the fallback method is triggered
+
+
+# Section - 10.6 :: Redis RateLimiter in Account Microservice
+
+    add the following config in the application.yml
+
+    resilience4j.ratelimiter:
+      configs:
+        default:
+          timeout-duration: 1000
+          limit-refresh-period: 5000
+          limit-for-period: 1
+
+    => Explanations ::
+    1. timeout-duration: 1000:
+        Definition: This is the maximum time (in milliseconds) that a request will wait to acquire permission before it times out.
+        Behavior: If a request hits the rate limit and tokens are not available, it will wait for up to 1000 milliseconds (1 second) before giving up and triggering a fallback (or failure). If the tokens are replenished within that time, the request is processed; otherwise, it fails or times out.
+        Example: If a request can't get a token immediately, it will wait for up to 1 second before timing out.
     
+    2. limit-refresh-period: 5000:
+        Definition: This is the interval (in milliseconds) after which the tokens in the bucket are refreshed.
+        Behavior: In this case, the tokens are refreshed every 5000 milliseconds (or 5 seconds). After each limit-refresh-period, the rate limiter replenishes the token bucket based on the limit-for-period.
+        Example: Every 5 seconds, the rate limiter will replenish the tokens, allowing requests to pass through again.
+
+    3. limit-for-period: 1:
+        Definition: This defines the maximum number of permits (tokens) that can be consumed during each limit-refresh-period.
+        Behavior: In this configuration, only 1 request is allowed during each 5-second window (as specified by limit-refresh-period).
+        Example: In a 5-second period, only 1 request is allowed to pass through. Once that single request is made, any other requests during that period will have to wait for the next refresh period or time out (if they exceed the timeout-duration).
+        
+
+    => add RateLimiter to a controller api which is /contact-info
+    => Run account microservice and hit the API again and again, then we will see the rate-limiter is working
+
+    *** Implement FallBack method when API is rate-limited ***
+
+        Fallback :: (পিছু হটা (turn back)) is a term used in software development that refers to the backup plan or alternative solution,
+        that is implemented when the primary plan fails or is not possible.
+
+        
+        In software systems, particularly in resilient systems like those using Resilience4j, Hystrix, or similar frameworks, a fallback is a method or mechanism that gets executed when the primary operation fails. This failure can occur due to reasons such as:
+
+         1. An exception is thrown
+         2. A service being unavailable
+         3. A timeout occurs
+         4. The system is rate-limited
+
+        Purpose of a Fallback Method
+        The fallback method serves as a backup plan to ensure your system can still respond gracefully when a failure occurs. Rather than the system failing entirely and returning an error to the user, the fallback provides a default behavior, possibly returning cached data, default values, or directing the user to an alternative service.
+        
+        The key purposes of a fallback method are:
+
+         1. Graceful Degradation: Ensures that when a service fails, the system can still provide a partial or degraded service instead of complete failure.
+         2. Resilience: Increases the overall resilience of the system by handling failures in a controlled manner.
+         3. User Experience: Improves user experience by preventing sudden crashes or displaying error messages. Users might receive cached or default data instead of seeing an error.
+
+
+        => Real-Life Example: Online Food Delivery Service
+        Imagine an online food delivery service where customers can order food through a mobile app. The app communicates with different services like:
+        
+         1. Menu Service: Provides the available menu items.
+         2. Delivery Service: Calculates delivery time and assigns delivery agents.
+         3. Payment Service: Processes payment for orders.
+
+        => Scenario without Fallback:
+        A customer places an order, but the Payment Service is down due to network issues or server maintenance.
+        The customer sees an error message like "Payment Failed," and the order process terminates abruptly.
+        The user has to retry or wait until the payment service is restored.
+
+        => Scenario with Fallback:
+        If the Payment Service is unavailable, the system triggers a fallback method.
+        The fallback could be a method that offers the user Cash on Delivery (COD) as an alternative payment option or retries the transaction after a short delay.
+        This way, the system gracefully handles the failure of the primary payment method, and the user can still complete the order without disruption.
+
+
+    *** Aspect default order of resiliency4J patterns ***
+        
+        1. Bulkhead
+        2. TimeLimiter
+        3. RateLimiter
+        4. CircuitBreaker
+        5. Retry
+    
+        we can change it by our implementation,
+        for better understanding read the spring docs
