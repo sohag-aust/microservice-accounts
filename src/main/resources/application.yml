@@ -68,6 +68,9 @@ management:
         enabled: true
     shutdown: # this is for deregistering from eureka server
       enabled: true
+  metrics: # this is for telling micrometer and prometheus to group all the matrix of this application under an application name, so we can easily understand which matrix is used for which microservice
+    tags:
+      application: ${spring.application.name}
 
 # deregistering from eureka server
 endpoints:
