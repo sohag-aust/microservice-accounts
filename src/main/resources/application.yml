@@ -127,3 +127,8 @@ resilience4j.ratelimiter:
       timeout-duration: 1000
       limit-refresh-period: 5000
       limit-for-period: 1
+
+# Logging Pattern for Distributed Tracing
+logging: # for distributed tracing [tags, traceId, spanId]
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
