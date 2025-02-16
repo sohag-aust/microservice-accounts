@@ -71,6 +71,9 @@ management:
   metrics: # this is for telling micrometer and prometheus to group all the matrix of this application under an application name, so we can easily understand which matrix is used for which microservice
     tags:
       application: ${spring.application.name}
+#  tracing:
+#    sampling:
+#      probability: 1.0
 
 # deregistering from eureka server
 endpoints:
@@ -127,6 +130,19 @@ resilience4j.ratelimiter:
       timeout-duration: 1000
       limit-refresh-period: 5000
       limit-for-period: 1
+
+#opentelemetry:
+#  exporter:
+#    otlp:
+#      endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT:http://localhost:4317}
+#  resource:
+#    attributes:
+#      service.name: ${spring.application.name}
+#      service.namespace: ${spring.application.name} # Optional, but good practice
+
+
+#tracing:
+#  url: ${OTEL_EXPORTER_OTLP_ENDPOINT:http://localhost:4317/v1/traces}
 
 # Logging Pattern for Distributed Tracing
 logging: # for distributed tracing [tags, traceId, spanId]
